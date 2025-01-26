@@ -1,0 +1,241 @@
+proxy-providers:
+  机场一:
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    proxy: 直连
+    url: "机场订阅"  
+
+proxies:
+- name: "直连"
+  type: direct
+  udp: true
+  
+# 全局配置
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7894
+ipv6: false
+allow-lan: true
+unified-delay: true
+tcp-concurrent: true
+log-level: info
+authentication:
+  - name:passwd
+  
+geodata-mode: false
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 48
+geox-url:
+  geosite: "https://ghproxy.cc/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  mmdb: "https://ghproxy.cc/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.metadb"
+  geoip: "https://ghproxy.cc/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat"
+  asn: "https://ghproxy.cc/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
+  
+
+external-controller: 0.0.0.0:9095
+secret: ""
+external-ui: ui
+external-ui-url: "https://ghproxy.cc/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
+find-process-mode: off
+global-client-fingerprint: chrome
+keep-alive-idle: 600
+keep-alive-interval: 30
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+  
+sniffer:
+  enable: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  force-domain:
+    - "+.v2ex.com"
+  skip-domain:
+    - "dlg.io.mi.com"
+    - "+.push.apple.com"
+    - "+.apple.com"
+    
+tun:
+  enable: true
+  stack: mixed
+  mtu: 9000
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  
+dns:
+  enable: true
+  prefer-h3: true
+  listen: 0.0.0.0:1053
+  ipv6: true
+  respect-rules: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - "+.lan"
+    - "+.local"
+    - "rule-set:private_domain,cn_domain,zhilian"
+    - +.services.googleapis.cn
+    - +.xn--ngstr-lra8j.com
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver-policy:
+    rule-set:private_domain,cn_domain,zhilian:
+      - 223.5.5.5
+      - 119.29.29.29
+    rule-set:geolocation-!cn:
+      - tls://dns.google
+      - tls://1dot1dot1dot1.cloudflare-dns.com
+
+pr: &pr {type: select, proxies: [默认代理, 香港故转, 日本故转, 狮城故转, 美国故转, 台湾故转, 韩国故转, 德国故转, 英国故转, 香港自动, 日本自动, 狮城自动, 美国自动, 台湾自动, 韩国自动, 德国自动, 英国自动, 香港手动, 日本手动, 狮城手动, 美国手动, 台湾手动, 韩国手动, 德国手动, 英国手动, 全部手动, 全部自动, 直连]}
+
+proxy-groups:
+  - {name: 默认代理, type: select, proxies: [香港故转, 日本故转, 狮城故转, 美国故转, 台湾故转, 韩国故转, 德国故转, 英国故转, 香港自动, 日本自动, 狮城自动, 美国自动, 台湾自动, 韩国自动, 德国自动, 英国自动, 香港手动, 日本手动, 狮城手动, 美国手动, 台湾手动, 韩国手动, 德国手动, 英国手动, 全部手动, 全部自动, 直连], icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Flight.png"}
+  - {name: YouTube, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/YouTube.png"}
+  - {name: Google, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Google.png"}
+  - {name: ChatGPT, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/ChatGPT.png"}
+  - {name: GitHub, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/GitHub.png"}
+  - {name: TVB, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Jellyfin.png"}
+  - {name: viuTV, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Jellyfin.png"}
+  - {name: RTHK, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Jellyfin.png"}
+  - {name: eToro, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Jellyfin.png"}
+  - {name: Bing, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Microsoft_Copilot.png"}
+  - {name: HBO, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/HBO_MAX.png"}
+  - {name: Twitter, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Twitter.png"}
+  - {name: Disney, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Disney.png"}
+  - {name: Spotify, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Spotify.png"}
+  - {name: OneDrive, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/OneDrive.png"}
+  - {name: Microsoft, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Microsoft.png"}
+  - {name: TikTok, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/TikTok.png"}
+  - {name: Telegram, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Telegram.png"}
+  - {name: NETFLIX, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Netflix_b.png"}
+  - {name: Steam, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Steam.png"}
+  - {name: PayPal, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/PayPal_business.png"}
+  - {name: 漏网之鱼, <<: *pr, icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Omission.png"}
+  - {name: 香港手动, type: select, include-all: true, filter: "(?i)香港|hk|hongkong|hong kong", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Hong_Kong.png"}
+  - {name: 日本手动, type: select, include-all: true, filter: "(?i)日|jp|japan", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Japan.png"}
+  - {name: 狮城手动, type: select, include-all: true, filter: "(?i)新加坡|坡|狮城|SG|Singapore", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Japan.png"}
+  - {name: 美国手动, type: select, include-all: true, filter: "(?i)美|us|unitedstates|united states", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/USA.png"} 
+  - {name: 台湾手动, type: select, include-all: true, filter: "(?i)🇹🇼|TW|tw|台湾", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Taiwan_Province.png"}
+  - {name: 韩国手动, type: select, include-all: true, filter: "(?i)🇰🇷|KR|kr|韩国", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Japan.png"}
+  - {name: 德国手动, type: select, include-all: true, filter: "(?i)🇩🇪|DE|ge|德国", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Japan.png"}
+  - {name: 英国手动, type: select, include-all: true, filter: "(?i)🇬🇧|GB|gb|英国|伦敦", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Japan.png"}
+  - {name: 香港故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)香港|hk|hongkong|hong kong", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 日本故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)日|jp|japan", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 狮城故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)新加坡|坡|狮城|SG|Singapore", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 美国故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)美|us|unitedstates|united states", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"} 
+  - {name: 台湾故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇹🇼|TW|tw|台湾", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 韩国故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇰🇷|KR|kr|韩国", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 德国故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇩🇪|DE|ge|德国", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 英国故转, type: fallback, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇬🇧|GB|gb|英国|伦敦", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Transfer.png"}
+  - {name: 香港自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)香港|hk|hongkong|hong kong", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 日本自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)日|jp|japan", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 狮城自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)新加坡|坡|狮城|SG|Singapore", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 美国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)美|us|unitedstates|united states", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"} 
+  - {name: 台湾自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇹🇼|TW|tw|台湾", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 韩国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇰🇷|KR|kr|韩国", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 德国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇩🇪|DE|ge|德国", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 英国自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "(?i)🇬🇧|GB|gb|英国|伦敦", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+  - {name: 全部手动, type: select, include-all: true, filter: "^((?!(剩余|流量|套餐|订阅|链式|直连)).)*$",icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Global.png"}
+  - {name: 全部自动, type: url-test, include-all: true, tolerance: 20, interval: 300, filter: "^((?!(剩余|流量|套餐|订阅|直连)).)*$", icon: "https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Auto_Link.png"}
+
+rules:
+  - RULE-SET,zhilian,直连
+  - RULE-SET,steamcn_domain,直连
+  - RULE-SET,proxylite,默认代理
+  - RULE-SET,ai,ChatGPT
+  - RULE-SET,tvb_domain,TVB
+  - RULE-SET,viutv_domain,viuTV
+  - RULE-SET,rthk_domain,RTHK
+  - RULE-SET,etoro_domain,eToro
+  - RULE-SET,etoro_ip,eToro
+  - RULE-SET,bing_domain,Bing
+  - RULE-SET,hbo_domain,HBO
+  - RULE-SET,twitter_domain,Twitter
+  - RULE-SET,disney_domain,Disney
+  - RULE-SET,spotify_domain,Spotify
+  - RULE-SET,github_domain,GitHub
+  - RULE-SET,youtube_domain,YouTube
+  - RULE-SET,google_domain,Google
+  - RULE-SET,onedrive_domain,OneDrive
+  - RULE-SET,microsoft_domain,Microsoft
+  - RULE-SET,tiktok_domain,TikTok
+  - RULE-SET,telegram_domain,Telegram
+  - RULE-SET,netflix_domain,NETFLIX
+  - RULE-SET,paypal_domain,PayPal
+  - RULE-SET,steam_domain,Steam
+  - RULE-SET,apple_domain,直连
+  - RULE-SET,apple_music,直连
+  - RULE-SET,gfw_domain,默认代理
+  - RULE-SET,geolocation-!cn,默认代理
+  - RULE-SET,google_ip,Google,no-resolve
+  - RULE-SET,netflix_ip,NETFLIX,no-resolve
+  - RULE-SET,telegram_ip,Telegram,no-resolve
+  - RULE-SET,cn_domain,直连
+  - RULE-SET,cn_ip,直连,no-resolve
+  - MATCH,漏网之鱼
+rule-anchor:
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+  class: &class {type: http, interval: 86400, behavior: classical, format: text}
+rule-providers:
+  proxylite: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/master/ProxyLite.list" }
+  ai: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/master/AI.list" }
+  zhilian: { <<: *class, url: "https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/master/Direct.list" }
+  steamcn_domain: { <<: *class, url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/SteamCN.list" }
+  steam_domain: { <<: *class, url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Steam.list" }
+  apple_music: { <<: *class, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/AppleMusic/AppleMusic.list" }
+  apple_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple-cn.mrs" }
+  tvb_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tvb.mrs" }
+  viutv_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/viu.mrs" }
+  rthk_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/rthk.mrs" }
+  etoro_domain: { <<: *domain, url: "https://github.com/bq328/ACL4SSR/raw/refs/heads/rm/eToro-domain.mrs" }
+  bing_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bing.mrs" }
+  hbo_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/hbo.mrs" }
+  twitter_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/twitter.mrs" }
+  disney_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/disney.mrs" }
+  spotify_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/spotify.mrs" }
+  private_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs" }
+  youtube_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/youtube.mrs" }
+  google_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/google.mrs" }
+  github_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/github.mrs" }
+  telegram_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs" }
+  netflix_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/netflix.mrs" }
+  paypal_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/paypal.mrs" }
+  onedrive_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/onedrive.mrs" }
+  microsoft_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft.mrs" }
+  tiktok_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tiktok.mrs" }
+  gfw_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gfw.mrs" }
+  geolocation-!cn: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/geolocation-!cn.mrs" }
+  cn_domain: { <<: *domain, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/cn.mrs" }
+  
+  cn_ip: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cn.mrs" }
+  google_ip: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/google.mrs" }
+  telegram_ip: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs" }
+  netflix_ip: { <<: *ip, url: "https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/netflix.mrs" }
+  etoro_ip: { <<: *domain, url: "https://github.com/bq328/ACL4SSR/raw/refs/heads/rm/eToro-ip.mrs" }
